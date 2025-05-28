@@ -10,6 +10,7 @@ from RAG.retrieval import retrieve_relevant_documents, get_document_stats
 from data_processing.preprocess_docs import preprocess_document
 from config import TOP_K_RESULTS
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 CORS(app)  # <-- Add this line right after app = Flask(__name__)
@@ -129,7 +130,9 @@ def query_endpoint():
 #     response = process_query(user_query)
 #     return jsonify({"response": response})
 
-
-
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    port = int(os.environ.get("PORT", 5001))
+    app.run(debug=True, host="0.0.0.0", port=port)
+
+# if __name__ == "__main__":
+#     app.run(debug=True, port=5001)
