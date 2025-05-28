@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LawGPT Client</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        #response { margin-top: 1em; white-space: pre-wrap; }
+        input, button { font-size: 1em; }
+    </style>
+</head>
+<body>
+    <h1>LawGPT Client</h1>
+    <p>Ask a legal question:</p>
+    <input type="text" id="query" size="60" placeholder="Type your question here..." />
+    <button onclick="sendQuery()">Ask</button>
+    <div id="response"></div>
+
+    <script>
+        async function sendQuery() {
+            const query = document.getElementById('query').value;
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = "Loading...";
+            try {
+                const res = await fetch('http://localhost:5001/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer secret-token-123'
+                    },
+                    body: JSON.stringify({ query })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    responseDiv.textContent = data.response;
+                } else {
+                    responseDiv.textContent = data.error || res.statusText;
+                }
+            } catch (err) {
+                responseDiv.textContent = "Error: " + err;
+            }
+        }
+    </script>
+</body>
+</html>
